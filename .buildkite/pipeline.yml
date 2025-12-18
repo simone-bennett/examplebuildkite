@@ -1,5 +1,14 @@
 steps:
+  # Always run tests on any branch
+  - label: ":test_tube: Test"
+    plugins:
+      - docker#v5.11.0:
+          image: "golang:1.18.0"
+    command: "go test -v ./..."
+
+  # Only run these on main
   - label: ":golang: Build"
+    branches: "main"
     plugins:
       - docker#v5.11.0:
           image: "golang:1.18.0"
@@ -8,9 +17,11 @@ steps:
       - "hello/hello"
 
   - block: ":raised_hand: Approve"
+    branches: "main"
     prompt: "Ready to continue?"
 
   - block: ":hand: Enter your name"
+    branches: "main"
     prompt: "Please enter your name"
     fields:
       - text: "Name"
@@ -18,6 +29,7 @@ steps:
         required: true
 
   - label: ":wave: Say Hello"
+    branches: "main"
     command: |
       buildkite-agent artifact download "hello/hello" .
       chmod +x hello/hello
