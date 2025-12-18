@@ -1,10 +1,18 @@
 steps:
+  # Lint - runs on all branches
+  - label: ":mag: Lint"
+    plugins:
+      - golangci-lint#v1.0.0:
+          use_docker: true
+
+  # Test - runs on all branches
   - label: ":test_tube: Test"
     plugins:
       - docker#v5.11.0:
           image: "golang:1.18.0"
     command: "go test -v ./..."
 
+  # Build - only on main
   - label: ":golang: Build"
     branches: "main"
     plugins:
