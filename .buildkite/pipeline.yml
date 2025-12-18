@@ -1,12 +1,10 @@
 steps:
-  # Always run tests on any branch
   - label: ":test_tube: Test"
     plugins:
       - docker#v5.11.0:
           image: "golang:1.18.0"
     command: "go test -v ./..."
 
-  # Only run these on main
   - label: ":golang: Build"
     branches: "main"
     plugins:
@@ -35,3 +33,7 @@ steps:
       chmod +x hello/hello
       NAME=$$(buildkite-agent meta-data get "user-name")
       ./hello/hello "$$NAME"
+
+notify:
+  - email: "simone.bennett@outlook.com"
+    if: build.branch == "main"
